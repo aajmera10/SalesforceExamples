@@ -1,0 +1,41 @@
+<apex:page showHeader="false"> 
+    <script src='https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit' />
+    
+    <div id="widgetId1" class="g-recaptcha" style="transform: scale(0.74);transform-origin: 0 0;-webkit-transform:scale(0.74);-webkit-transform-origin: 0 0"></div>
+
+    <style>
+        body, div{
+            background:transparent !important;
+        }
+    </style>
+    
+    <script type="text/javascript">
+        var onloadCallback = function() {
+            grecaptcha.render('widgetId1', {
+              'sitekey' : '6LcMe5kUAAAAAKHnQ3sVJqCfpsvj2ZFnsoxtLAPb', 
+              'data-size' : 'compact',
+              'data-theme' : 'light'
+            });
+        };
+
+
+        window.addEventListener("message", function(event) {
+            var hostURL = 'https://playful-shark-s3udin-dev-ed.lightning.force.com';
+            if(event.origin !== hostURL){
+                return;
+            }
+            
+            if(event.data.action == "alohaCallingCAPTCHA"){  
+                var message = document.getElementById("g-recaptcha-response").value;
+                if (message == ""){
+                    parent.postMessage({ action: "alohaCallingCAPTCHA", alohaResponseCAPTCHA : "NOK" }, hostURL);
+                }
+                else{
+                    parent.postMessage({ action: "alohaCallingCAPTCHA", alohaResponseCAPTCHA : "OK" },  hostURL);
+                }
+            }
+
+        }, false);
+        
+    </script>
+</apex:page>

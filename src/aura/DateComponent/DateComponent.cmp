@@ -1,0 +1,6 @@
+<aura:component >
+    <aura:attribute name="myDate" type="String"></aura:attribute>
+    <Lightning:input aura:id="EndDateField" value="{!v.myDate}" displayDatePicker="true" format="MM/dd/yyyy"/>
+    <lightning:input type="number" name="decimal" label="Enter a decimal value" step="0.01"/>
+    <ui:button aura:id="button" label="Click me" press="{!c.getInput}" />
+</aura:component>

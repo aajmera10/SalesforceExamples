@@ -1,0 +1,28 @@
+<apex:page standardController="Contact">
+    
+    <apex:pageBlock title="Contact Summary">
+        <apex:pageBlockSection >
+        	
+           First Name:{!Contact.FirstName}<br/>
+            Last Name:{!Contact.LastName}<br/>
+            Owner Email:{!Contact.Owner.Email}<br/>
+			<apex:detail relatedList="false"/>    
+            
+		 <apex:relatedList list="Opportunities" pageSize="5"/>
+         <apex:outputField value="{! Contact.FirstName }"/>
+		 <apex:outputField value="{! Contact.Phone }"/>
+		 <apex:pageBlock title="Contacts">
+  		 <apex:pageBlockTable value="{!Contact}" var="contact">
+     	 <apex:column value="{!contact.Name}"/>
+     	 <apex:column value="{!contact.Title}"/>
+     	 <apex:column value="{!contact.Phone}"/>
+             <apex:column value="{!contact.Master__c}"/>
+   	</apex:pageBlockTable>
+</apex:pageBlock>
+
+
+            
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    
+</apex:page>

@@ -1,0 +1,5 @@
+<apex:page sidebar="false" showHeader="false"> 
+    <apex:form >
+        <apex:image url="https://developer.salesforce.com/files/salesforce-developer-network-logo.png"/>
+    </apex:form>
+</apex:page>

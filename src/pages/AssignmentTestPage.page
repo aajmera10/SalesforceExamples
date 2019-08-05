@@ -1,0 +1,67 @@
+<apex:page controller="TestControllerAssignment" readOnly="false" tabStyle="Account" sidebar="false">
+    <apex:form >
+        <apex:actionFunction name="refreshPageSize" action="{!refreshPageSize}" status="fetchStatus" reRender="searchBlock"/>
+        <apex:pageBlock title="Contact Summary" id="searchBlock">
+            <apex:pageblockSection >
+                <apex:inputText value="{!searchString}" label="Search"/> 
+                <apex:commandButton action="{!search}" value="Search" rerender="table" />
+            </apex:pageblockSection>
+            <apex:pageBlockSection columns="1" >
+                <apex:pageMessages />
+                <apex:commandButton action="{!save}" value="Save" />
+                <apex:pageBlock id="resultId" rendered="{!if(contacts!= null && contacts.size > 0, true,false )}">
+                    <apex:pageBlockButtons location="Bottom" >
+                        <div style="text-align:right"> 
+                            <apex:selectList value="{!size}" multiselect="false" size="1" onchange="refreshPageSize();">
+                                <apex:selectOptions value="{!paginationSizeOptions}"/>
+                            </apex:selectList>
+                            Total Records Found: {!cont.resultSize}  
+                            <apex:commandButton action="{!First}" title="First Page" value="First Page" rendered="{!cont.HasPrevious}"/>
+                            <apex:image url="/img/search_prevarrow_disabled.gif" styleClass="prevArrow" rendered="{!NOT(cont.HasPrevious)}"/>  
+                            <apex:image url="/img/search_prevarrow.gif" title="Previous Page" styleClass="prevArrow" rendered="{!cont.HasPrevious}"/>  
+                            <apex:commandButton action="{!Previous}" title="Previous Page" value="Previous Page" rendered="{!cont.HasPrevious}"/>  
+                            <apex:outputPanel styleClass="pShowLess noLink" style="color:grey" rendered="{!NOT(cont.HasPrevious)}">Previous Page 	 </apex:outputPanel>           
+                            <apex:outputPanel styleClass="pShowLess noLink" style="color:grey" rendered="{!NOT(cont.HasNext)}">  Next Page</apex:outputPanel>           
+                            <apex:commandButton title="Next Page" value="Next Page" rendered="{!cont.HasNext}" action="{!Next}"/>&nbsp;  
+                            <apex:image url="/img/search_nextarrow.gif" title="Next Page" styleClass="nextArrow" rendered="{!cont.HasNext}"/>  
+                            <apex:image url="/img/search_nextarrow_disabled.gif" rendered="{!NOT(cont.HasNext)}"/> 
+                            <img src="/s.gif" title="Last Page" alt="Last Page" class="last"/>
+                            <apex:commandButton action="{!Last}" title="Last Page" value="Last Page" rendered="{!cont.HasPrevious}"/>
+                        </div>
+                    </apex:pageBlockButtons>            
+                    <apex:pageBlockTable value="{!Contacts}" var="con" id="table">
+                        <apex:column >
+                            <apex:facet name="header">
+                                <apex:commandLink action="{!queryData}" value="First Name{!IF(sortExpression=='FirstName',IF(sortDirection='ASC','▼','▲'),'')}" id="cmdSort">
+                                    <apex:param value="name" name="column" assignTo="{!sortExpression}" ></apex:param>
+                                </apex:commandLink>
+                            </apex:facet>
+                            <a href="/{!con.id}" target="_blank"> {!con.FirstName}</a>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">
+                                <apex:commandLink action="{!queryData}" value="Last Name{!IF(sortExpression=='LastName',IF(sortDirection='ASC','▼','▲'),'')}" >
+                                    <apex:param value="name" name="column" assignTo="{!sortExpression}" ></apex:param>
+                                </apex:commandLink>
+                            </apex:facet>
+                        <apex:outputLink value="{!con.id}">{!con.LastName}</apex:outputLink>
+                        </apex:column>
+                        <apex:column >
+                           <apex:facet name="header">
+                                <apex:commandLink action="{!queryData}" value="Account Name{!IF(sortExpression=='Account.Name',IF(sortDirection='ASC','▼','▲'),'')}" >
+                                    <apex:param value="name" name="column" assignTo="{!sortExpression}" ></apex:param>
+                                </apex:commandLink>
+                            </apex:facet>
+                            <apex:outputLink value="{!con.Accountid}">{!con.Account.Name}</apex:outputLink>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">Master Contact</apex:facet>
+                            <apex:inputCheckbox value="{!con.Master__c}"/>
+                        </apex:column>
+                        
+                    </apex:pageBlockTable>
+                </apex:pageBlock>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,100 @@
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:hasRecordId" access="global" 
+                controller ="gddr">
+    <aura:attribute name="recordId" type="Id" access="global" />
+    <aura:attribute name = "status" type = "string"/>
+    <aura:attribute name = "contactObj" type = "Contact"/>
+    <aura:attribute name = "reason" type = "String" default = ''/>
+    <aura:attribute name = "mappingObjname" type ="List"/>
+    <aura:attribute name = "warningModal" type = "boolean" default = "false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <!-- PAGE HEADER -->
+    <lightning:layout class="slds-page-header slds-page-header--object-home">
+        <lightning:layoutItem>
+            <lightning:icon iconName="standard:scan_card" alternativeText="License Event"/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="horizontal-small" class="slds-page-header__title slds-truncate">
+            <div class="slds-page-header__title slds-truncate">
+                <h1 class="slds-text-heading--label">Change Status</h1>
+            </div>
+        </lightning:layoutItem>
+    </lightning:layout>
+    <!-- / PAGE HEADER -->
+    
+    <div class="slds-form-element">
+        <label class="slds-form-element__label" for="select-01">Select Industry</label>
+        <lightning:select aura:id="statustovalidate" messageWhenValueMissing="This Field is Mandatory" name="decipher_name" required = "true" label="Decipher Contact Name" value="{!v.status}" >
+            <option value="" >-- None --</option>
+            <aura:iteration items="{!v.mappingObjname}" var="item" >
+                <option value="{!item}" selected="{!item == v.status}">{!item}</option>
+            </aura:iteration>
+        </lightning:select>
+    </div>
+    {!v.status}
+    <div>
+        <aura:if isTrue = "{! v.status == 'Closed' }">
+            <div class = "slds-form-element">
+                <label class = "slds-form-element_label"></label>
+                <div>
+                    <lightning:textarea name="reasonInput" aura:id="reasontovalid" label="Reason" required="true" messagewhenvaluemissing = "This Field is Mandatory" value="{!v.reason}"/>
+                </div>
+            </div>
+        </aura:if >
+    </div>
+    <div class="slds-align_absolute-center slds-m-top_x-small">
+        <lightning:button label="Submit"
+                          class="slds-m-top--medium"
+                          variant="brand"
+                          onclick="{!c.updateContact}"/>
+        <lightning:button label="Cancel"
+                          class="slds-m-top--medium"
+                          variant="destructive"
+                          onclick="{!c.cancelClickHandler}"/>
+    </div> 
+    
+    
+    <aura:if isTrue = "{!v.warningModal}">
+        <!-- Modal/Popup Box starts here-->
+        <div class="slds-p-around_x-small" style ="height:300px" >
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- Modal/Popup Box Header Starts here-->
+                    <header class="slds-modal__header slds-box slds-theme_shade slds-theme_texture">
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Warning</h2>
+                    </header>
+                    <!--Modal/Popup Box Body Starts here-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p><b>Are You Sure ?
+                            </b>
+                        </p>
+                    </div>
+                    <!--Modal/Popup Box Footer Starts here-->
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral"
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{! c.cancelWarning }"/>
+                        <lightning:button variant="brand"
+                                          label="OK"
+                                          title="OK"
+                                          onclick="{!c.acceptWarning}"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open slds-align_absolute-center" style="height:18rem"></div>
+        </div>
+    </aura:if>
+    
+    <!--loading spinner start... style=Brand Medium (blue dots)-->
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+</aura:component>

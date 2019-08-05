@@ -1,0 +1,22 @@
+<apex:page >
+    <html>
+        <head>
+            <title>reCAPTCHA demo: Simple page</title>
+            <script src="https://www.google.com/recaptcha/api.js?render=6Le8epkUAAAAAIQGuhBQ1pjZ6JZI54XNOJcOnEZk">
+            </script>
+        </head>
+        <body>
+            <form action="?" method="POST">
+                <script>
+                grecaptcha.ready(function() {
+                    grecaptcha.execute('6Le8epkUAAAAAIQGuhBQ1pjZ6JZI54XNOJcOnEZk', {action: 'homepage'}).then(function(token) {
+                        ...
+                    });
+                });
+                </script>
+                <br/>
+                <input type="submit" value="Submit"/>
+            </form>
+        </body>
+    </html>
+</apex:page>
